@@ -1,27 +1,6 @@
-const splash = document.querySelector('#splash');
-const video = document.querySelector('video');
-const camCanvas = document.querySelector('#cam-canvas');
-const camContext = camCanvas.getContext('2d');
-const canvas = document.querySelector('#sc-canvas');
-const context = canvas.getContext('2d');
+import { video, initCam } from './video.js';
+import { canvas, context, camCanvas, camContext, setCanvasDimensions } from './canvas.js';
 
-function setCanvasDimensions() {
-  const scale = window.devicePixelRatio;
-  canvas.width = Math.floor(window.innerWidth * scale);
-  canvas.height = Math.floor(window.innerHeight * scale);
-}
-
-function initCam() {
-  navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-  .then(function(stream) {
-      video.srcObject = stream;
-      video.play();
-  })
-  .catch(function(err) {
-      console.log(`navigator.getUserMedia error: ${err}`);
-  });
-}
-    
 async function init() {
     model = await blazeface.load();
 
@@ -31,7 +10,7 @@ async function init() {
     return model
 }
 
-async function main() {
+export async function main() {
   const predictions = await model.estimateFaces(video, false);
   let pos = canvas.width / 2;
 
@@ -60,20 +39,5 @@ async function main() {
 
   requestAnimationFrame(main)
 }
-
-video.addEventListener('canplay', () => {
-    const width = video.videoWidth;
-    const height = video.videoHeight;
-
-    video.setAttribute('width', width);
-    video.setAttribute('height', height);
-    camCanvas.setAttribute('width', width);
-    camCanvas.setAttribute('height', height);
-
-    splash.style.display = 'none';
-    main()
-});
-
-window.addEventListener('resize', setCanvasDimensions)
 
 let model = init();
