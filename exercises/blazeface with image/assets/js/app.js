@@ -24,7 +24,7 @@ async function main() {
   document.querySelector('#splash').style.display = 'none';
   canvas.width = img.width;
   canvas.height = img.height;
-  ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height)
+  ctx.drawImage(img, 0, 0, img.width, img.height)
 
   for (let prediction of predictions) {
     const start = prediction.topLeft;

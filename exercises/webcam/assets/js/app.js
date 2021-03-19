@@ -1,4 +1,3 @@
-// Hi
 const splash = document.querySelector('#splash');
 const overlay = document.querySelector('#overlay');
 const video = document.querySelector('video');
@@ -19,8 +18,8 @@ function init() {
 
 // Listen for the video to start playing
 video.addEventListener('canplay', () => {
-    width = video.videoWidth;
-    height = video.videoHeight;
+    const width = video.videoWidth;
+    const height = video.videoHeight;
 
     video.setAttribute('width', width);
     video.setAttribute('height', height);
