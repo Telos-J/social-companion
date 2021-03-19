@@ -1,5 +1,4 @@
 const splash = document.querySelector('#splash');
-const overlay = document.querySelector('#overlay');
 const video = document.querySelector('video');
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
