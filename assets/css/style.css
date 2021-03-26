@@ -20,6 +20,7 @@ video {
     left: 0;
     transform: scaleX(-1);
     width: 200px;
+    display: none;
 }
 
 #sc-canvas {
