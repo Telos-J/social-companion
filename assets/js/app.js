@@ -17,19 +17,19 @@ async function init() {
 }
 
 export async function main() {
-  await faceDetection.estimateFaces(video);
+    await faceDetection.estimateFaces(video);
 
-  camContext.drawImage(video, 0, 0, camCanvas.width, camCanvas.height)
-  context.clearRect(0, 0, canvas.width, canvas.height);
+    camContext.drawImage(video, 0, 0, camCanvas.width, camCanvas.height)
+    context.clearRect(0, 0, canvas.width, canvas.height);
 
-  faceDetection.drawPredictions();
+    faceDetection.drawPredictions();
 
-  const pos = faceDetection.getTrackPos()
-  companion.track(pos)
-  // companion.drawTarget(pos)
-  companion.draw();
+    const pos = faceDetection.getTrackPos()
+    companion.track(pos)
+    // companion.drawTarget(pos)
+    companion.draw();
 
-  requestAnimationFrame(main)
+    requestAnimationFrame(main)
 }
 
 init();

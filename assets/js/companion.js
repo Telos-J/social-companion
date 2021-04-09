@@ -47,21 +47,11 @@ export class Companion {
         this.x += this.speed;
     }
 
-    moveEyeLeft() {
-        this.eyePos -= 1;
-        if (this.eyePos < -this.width / 6) this.eyePos = -this.width / 6
-    }
-
-    moveEyeRight() {
-        this.eyePos += 1;
-        if (this.eyePos > this.width / 6) this.eyePos = this.width / 6
-    }
-
     track(pos) {
         if (this.x > pos * canvas.width + this.range) this.moveLeft();
         else if (this.x < pos * canvas.width - this.range) this.moveRight();
 
-        this.eyePos = (pos - this.x / canvas.width) * this.width / 6;
+        this.eyePos = (pos - this.x / canvas.width) * this.width / 6 / 3;
     }
 
     drawTarget(pos) {
