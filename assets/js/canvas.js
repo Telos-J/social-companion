@@ -18,12 +18,3 @@ export function convertToCanvasCoord(x, y) {
 }
 
 window.addEventListener('resize', setCanvasDimensions)
-
-window.addEventListener('mousemove', (e) => {
-    const [x, y] = convertToCanvasCoord(e.clientX, e.clientY);
-
-    // context.strokeStyle = 'black';
-    // context.beginPath();
-    // context.arc(x, y, 20, 0, Math.PI * 2);
-    // context.stroke();
-})

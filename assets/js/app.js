@@ -1,5 +1,5 @@
 import { video, initCam } from './video.js';
-import { canvas, context, camCanvas, camContext, setCanvasDimensions } from './canvas.js';
+import { canvas, context, camCanvas, camContext, setCanvasDimensions, convertToCanvasCoord } from './canvas.js';
 import { Companion } from './companion.js';
 import { faceDetection } from './faceDetection.js';
 
@@ -12,6 +12,11 @@ async function init() {
     initCam();
     setCanvasDimensions();
     companion = new Companion(canvas.width / 2, canvas.height / 2, 100, 100);
+
+    window.addEventListener('click', (e) => {
+        const [x, y] = convertToCanvasCoord(e.clientX, e.clientY);
+        companion.click(x, y)
+    })
 
     return model
 }
