@@ -1,15 +1,31 @@
 import { canvas, context, convertToCanvasCoord } from './canvas.js';
 
 export class Companion {
-    constructor(x, y, width, height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+    constructor() {
+        this._x = 0.5;
+        this._y = 0.5;
+        this.width = 100;
+        this.height = 100;
         this.speed = 5;
         this.range = 200;
         this.eyePos = 0;
         this.color = 'black';
+    }
+
+    get x() {
+        return this._x * canvas.width
+    }
+
+    set x(x) {
+        this._x = x / canvas.width
+    }
+
+    get y() {
+        return this._y * canvas.height
+    }
+
+    set y(y) {
+        this._y = y / canvas.height
     }
 
     init() {

@@ -11,7 +11,7 @@ async function init() {
 
     initCam();
     setCanvasDimensions();
-    companion = new Companion(canvas.width / 2, canvas.height / 2, 100, 100);
+    companion = new Companion();
     companion.init();
 
     return model
@@ -27,7 +27,7 @@ export async function main() {
 
     const pos = faceDetection.getTrackPos()
     companion.track(pos)
-    // companion.drawTarget(pos)
+    companion.drawTarget(pos)
     companion.draw();
 
     requestAnimationFrame(main)
