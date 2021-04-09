@@ -1,4 +1,4 @@
-import { canvas, context } from './canvas.js';
+import { canvas, context, convertToCanvasCoord } from './canvas.js';
 
 export class Companion {
     constructor(x, y, width, height) {
@@ -10,6 +10,19 @@ export class Companion {
         this.range = 200;
         this.eyePos = 0;
         this.color = 'black';
+    }
+
+    init() {
+        window.addEventListener('click', (e) => {
+            const [x, y] = convertToCanvasCoord(e.clientX, e.clientY);
+            this.click(x, y)
+        })
+
+        window.addEventListener('mousemove', (e) => {
+            const [x, y] = convertToCanvasCoord(e.clientX, e.clientY);
+            if (this.collide(x, y)) document.body.style.cursor = 'pointer';
+            else document.body.style.cursor = 'default';
+        })
     }
 
     draw() {
@@ -62,9 +75,13 @@ export class Companion {
         context.stroke();
     }
 
+    collide(x, y) {
+        return x > this.x - this.width / 2 && x < this.x + this.width / 2 && 
+            y > this.y - this.height / 2 && y < this.y + this.height / 2
+    }
+
     click(x, y) {
-        if (x > this.x - this.width / 2 && x < this.x + this.width / 2 && 
-            y > this.y - this.height / 2 && y < this.y + this.height / 2) 
-                this.color = this.color === 'black' ? 'red' : 'black';
+        if (this.collide(x, y)) 
+            this.color = this.color === 'black' ? 'red' : 'black';
     }
 }
