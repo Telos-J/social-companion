@@ -42,3 +42,51 @@ video {
     top: 50%;
     transform: translate(-50%, -50%);
 }
+
+#penguin #face {
+    transition: transform 0.5s;
+}
+
+#penguin.left #face {
+    transform: translateX(-4px)
+}
+
+#penguin.right #face {
+    transform: translateX(4px)
+}
+
+#penguin #belly {
+    transition: transform 0.5s;
+}
+
+#penguin.left #belly {
+    transform: translateX(-3px)
+}
+
+#penguin.right #belly {
+    transform: translateX(3px)
+}
+
+#penguin #left-wing {
+    transition: transform 0.5s;
+}
+
+#penguin.left #left-wing {
+    transform: translateX(-3px)
+}
+
+#penguin.right #left-wing {
+    transform: translateX(3px)
+}
+
+#penguin #right-wing {
+    transition: transform 0.5s;
+}
+
+#penguin.left #right-wing {
+    transform: translateX(3px)
+}
+
+#penguin.right #right-wing {
+    transform: translateX(-3px)
+}
