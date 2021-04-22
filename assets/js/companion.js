@@ -7,7 +7,8 @@ export class Companion {
         this.width = 100;
         this.height = 100;
         this.speed = 5;
-        this.range = 200;
+        this.velocity = 0;
+        this.range = 500;
         this.eyePos = 0;
         this.DOM = document.querySelector('#penguin');
         this.trackLeft = false;
@@ -46,17 +47,15 @@ export class Companion {
     }
 
     track(pos) {
-        if (this.x > pos * canvas.width + this.range) {
-            this.trackLeft = true;
-            this.trackRight = false;
-        }
-        else if (this.x < pos * canvas.width - this.range) {
-            this.trackLeft = false;
-            this.trackRight = true;
-        }
+        if (this.x > pos * canvas.width + this.range) this.trackLeft = true;
+        else if (this.x < pos * canvas.width - this.range) this.trackRight = true;
 
         if (this.trackLeft && this.x > pos * canvas.width) this.moveLeft();
         else if (this.trackRight && this.x < pos * canvas.width) this.moveRight();
+        else {
+            this.trackLeft = false;
+            this.trackRight = false;
+        }
 
         const eyes = Array.from(this.DOM.querySelectorAll('.eye'))
         for (let eye of eyes) {
