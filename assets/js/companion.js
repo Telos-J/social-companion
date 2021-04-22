@@ -48,7 +48,7 @@ export class Companion {
 
         const eyes = Array.from(this.DOM.querySelectorAll('.eye'))
         for (let eye of eyes) {
-            const x = (pos - this.x / canvas.width) * this.width / 6 / 3;
+            const x = (pos - this.x / canvas.width) * this.width / 6;
             eye.style.transform = `translateX(${x}px)`;
         }
     }
