@@ -45,14 +45,15 @@ video {
 
 #penguin #face {
     transition: transform 0.5s;
+    transform-origin: center;
 }
 
 #penguin.left #face {
-    transform: translateX(-4px)
+    transform: translateX(-8px) scaleX(0.95)
 }
 
 #penguin.right #face {
-    transform: translateX(4px)
+    transform: translateX(8px) scaleX(0.95)
 }
 
 #penguin #belly {
