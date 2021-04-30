@@ -91,3 +91,27 @@ video {
 #penguin.right #right-wing {
     transform: translateX(-3px)
 }
+
+#penguin #beak {
+    transition: transform 0.5s;
+}
+
+#penguin.left #beak {
+    transform: translateX(-1px)
+}
+
+#penguin.right #beak {
+    transform: translateX(1px)
+}
+
+#penguin #lower-beak {
+    transition: transform 0.5s;
+}
+
+#penguin.left #lower-beak {
+    transform: translateX(1px)
+}
+
+#penguin.right #lower-beak {
+    transform: translateX(-1px)
+}
