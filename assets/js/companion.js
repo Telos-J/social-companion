@@ -11,8 +11,18 @@ export class Companion {
         this.range = 600;
         this.eyePos = 0;
         this.DOM = document.querySelector('#penguin');
+        this.face = this.DOM.querySelector('#face');
+        this.belly = this.DOM.querySelector('#belly');
+        this.leftWing = this.DOM.querySelector('#left-wing');
+        this.rightWing = this.DOM.querySelector('#right-wing');
+        this.beak = this.DOM.querySelector('#beak');
+        this.upperBeak = this.DOM.querySelector('#upper-beak');
+        this.lowerBeak = this.DOM.querySelector('#lower-beak');
+        this.leftFoot = this.DOM.querySelector('#left-foot');
+        this.rightFoot = this.DOM.querySelector('#right-foot');
         this.trackLeft = false;
         this.trackRight = false;
+        this.state = 'idle';
     }
 
     init() {
@@ -50,11 +60,13 @@ export class Companion {
         if (this.x > pos * canvas.width + this.range && !this.trackLeft) {
             this.DOM.classList.remove('right')
             this.DOM.classList.add('left')
+            this.animateWalkLeft()
             this.trackLeft = true;
         }
         else if (this.x < pos * canvas.width - this.range) {
             this.DOM.classList.remove('left')
             this.DOM.classList.add('right')
+            this.animateWalkRight()
             this.trackRight = true;
         }
 
@@ -65,6 +77,7 @@ export class Companion {
             this.trackRight = false;
             this.DOM.classList.remove('left')
             this.DOM.classList.remove('right')
+            this.animateIdle()
         }
 
         this.trackEyes(pos)
@@ -83,5 +96,78 @@ export class Companion {
         context.beginPath();
         context.arc(pos * canvas.width, this.y, this.range, 0, Math.PI * 2);
         context.stroke();
+    }
+
+    animateWalkLeft() {
+        if (this.state === 'walkLeft') return
+
+        gsap.timeline({ duration: 0.5 })
+            .to(this.face, { x: -8, scaleX: 0.95, }, 0)
+            .to(this.belly, { x: -3, }, 0)
+            .to(this.leftWing, { x: 3, }, 0)
+            .to(this.rightWing, { x: 3, }, 0)
+            .to(this.beak, { x: -1, }, 0)
+            .to(this.lowerBeak, { x: 1, }, 0)
+
+        gsap.timeline({ duration: 0.1, repeat: -1, clearProps: "all" })
+            .to(this.leftFoot, { x: -10, y: -10 })
+            .to(this.leftFoot, { x: -46, y: 0 })
+            .to(this.leftFoot, { x: -23, y: 0 })
+            .to(this.leftFoot, { x: 0, y: 0 })
+
+        gsap.timeline({ duration: 0.1, repeat: -1, clearProps: "all" })
+            .to(this.rightFoot, { x: 23, y: 0 })
+            .to(this.rightFoot, { x: 46, y: 0 })
+            .to(this.rightFoot, { x: 30, y: -10 })
+            .to(this.rightFoot, { x: 0, y: 0 })
+
+        this.state = 'walkLeft'
+    }
+
+    animateWalkRight() {
+        if (this.state === 'walkRight') return
+
+        gsap.timeline({ duration: 0.5 })
+            .to(this.face, { x: 8, scaleX: 0.95, }, 0)
+            .to(this.belly, { x: 3, }, 0)
+            .to(this.leftWing, { x: -3, }, 0)
+            .to(this.rightWing, { x: -3, }, 0)
+            .to(this.beak, { x: 1, }, 0)
+            .to(this.lowerBeak, { x: -1, }, 0)
+
+        gsap.timeline({ duration: 0.25, repeat: -1, clearProps: "all" })
+            .to(this.leftFoot, { x: -23, y: 0 })
+            .to(this.leftFoot, { x: -46, y: 0 })
+            .to(this.leftFoot, { x: -30, y: -10 })
+            .to(this.leftFoot, { x: 0, y: 0 })
+
+        gsap.timeline({ duration: 0.25, repeat: -1, clearProps: "all" })
+            .to(this.rightFoot, { x: 10, y: -10 })
+            .to(this.rightFoot, { x: 46, y: 0 })
+            .to(this.rightFoot, { x: 23, y: 0 })
+            .to(this.rightFoot, { x: 0, y: 0 })
+
+        this.state = 'walkRight'
+    }
+
+    animateIdle() {
+        if (this.state === 'idle') return
+
+        gsap.timeline({ duration: 0.5 })
+            .to(this.face, { x: 0, scaleX: 1, }, 0)
+            .to(this.belly, { x: 0, }, 0)
+            .to(this.leftWing, { x: 0, }, 0)
+            .to(this.rightWing, { x: 0, }, 0)
+            .to(this.beak, { x: 0, }, 0)
+            .to(this.lowerBeak, { x: 0, }, 0)
+
+        gsap.killTweensOf(this.leftFoot)
+        gsap.killTweensOf(this.rightFoot)
+
+        gsap.timeline({ duration: 0.1, clearProps: "all" })
+            .to(this.leftFoot, { x: 0, y: 0 }, 0)
+            .to(this.rightFoot, { x: 0, y: 0 }, 0)
+
+        this.state = 'idle'
     }
 }

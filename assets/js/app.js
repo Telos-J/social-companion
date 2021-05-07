@@ -6,6 +6,8 @@ import { faceDetection } from './faceDetection.js';
 export let companion;
 
 async function init() {
+    gsap.registerPlugin(MorphSVGPlugin);
+
     const model = await blazeface.load();
     faceDetection.addModel(model);
 
