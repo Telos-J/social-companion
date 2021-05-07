@@ -29,7 +29,6 @@ export async function main() {
 
     const pos = faceDetection.getTrackPos()
     companion.track(pos)
-    companion.draw();
     companion.drawTarget(pos)
 
     requestAnimationFrame(main)
