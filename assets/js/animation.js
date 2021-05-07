@@ -1,0 +1,1 @@
+gsap.registerPlugin(MorphSVGPlugin);
