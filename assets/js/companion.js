@@ -21,10 +21,19 @@ export class Companion {
         this.eyelidLower = this.dom.querySelectorAll('.eye-lid-lower');
         this.trackLeft = false;
         this.trackRight = false;
+        this.idleTime = 0;
     }
 
     init() {
+        const self = this
         this.animateBlink()
+        window.setInterval(() => { self.tickIdleTime() }, 1000)
+    }
+
+    tickIdleTime() {
+        if (this.state === 'idle') this.idleTime++
+        else this.idleTime = 0
+        if (this.idleTime >= 10) this.idleTime = 0
     }
 
     get x() {
@@ -55,9 +64,19 @@ export class Companion {
         return this.x < pos * canvas.clientWidth
     }
 
+    setTrackDirection(pos) {
+        if (this.isLeftOfTargetRange(pos)) {
+            this.trackLeft = true;
+            this.trackRight = false;
+        }
+        else if (this.isRightOfTargetRange(pos)) {
+            this.trackLeft = false;
+            this.trackRight = true;
+        }
+    }
+
     track(pos) {
-        if (this.isLeftOfTargetRange(pos)) this.trackLeft = true;
-        else if (this.isRightOfTargetRange(pos)) this.trackRight = true;
+        this.setTrackDirection(pos)
 
         if (this.trackLeft && this.isLeftOfTarget(pos)) {
             this.animateWalkLeft()
@@ -70,7 +89,6 @@ export class Companion {
             this.trackRight = false;
             this.animateIdle()
         }
-
 
         this.trackEyes(pos)
     }
@@ -169,7 +187,6 @@ export class Companion {
         this.interval = window.setInterval(() => {
             gsap.to(this.dom, 0.5, { x: '+=46px' })
         }, 500)
-
     }
 
     async animateIdle() {
@@ -196,12 +213,18 @@ export class Companion {
             .fromTo(this.body, { y: 0 }, { y: 2, duration: 0.5 })
             .fromTo(this.leftWing, { rotate: 0 }, { rotate: -5, transformOrigin: "top left", duration: 0.5 }, 0)
             .fromTo(this.rightWing, { rotate: 0 }, { rotate: 5, transformOrigin: "top right", duration: 0.5 }, 0)
-
     }
 
     animateBlink() {
         gsap.timeline({ repeat: -1, yoyo: true })
             .to(this.eyelidUpper, { y: 15, duration: 0.1, delay: 4 }, 0)
             .to(this.eyelidLower, { y: -15, duration: 0.1, delay: 4 }, 0)
+    }
+
+    animateHappy() {
+        if (this.state === 'happy') return
+        this.state = 'happy'
+
+        this.killTweens();
     }
 }
