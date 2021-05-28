@@ -15,8 +15,13 @@ export class Companion {
         this.beak = this.dom.querySelector('#beak');
         this.upperBeak = this.dom.querySelector('#upper-beak');
         this.lowerBeak = this.dom.querySelector('#lower-beak');
+        this.lowerBeakOpenable = this.dom.querySelector('#lower-beak-openable');
         this.leftFoot = this.dom.querySelector('#left-foot');
         this.rightFoot = this.dom.querySelector('#right-foot');
+        this.leftFootFront = this.dom.querySelector('#left-foot-front');
+        this.rightFootFront = this.dom.querySelector('#right-foot-front');
+        this.leftFootBack = this.dom.querySelector('#left-foot-back');
+        this.rightFootBack = this.dom.querySelector('#right-foot-back');
         this.eyelidUpper = this.dom.querySelectorAll('.eye-lid-upper');
         this.eyelidLower = this.dom.querySelectorAll('.eye-lid-lower');
         this.trackLeft = false;
@@ -27,13 +32,15 @@ export class Companion {
     init() {
         const self = this
         this.animateBlink()
+        this.animateIdle()
         window.setInterval(() => { self.tickIdleTime() }, 1000)
     }
 
     tickIdleTime() {
-        if (this.state === 'idle') this.idleTime++
+        if (this.state === 'idle' || this.state === 'happy') this.idleTime++
         else this.idleTime = 0
         if (this.idleTime >= 10) this.idleTime = 0
+        console.log(this.idleTime)
     }
 
     get x() {
@@ -87,7 +94,8 @@ export class Companion {
         else {
             this.trackLeft = false;
             this.trackRight = false;
-            this.animateIdle()
+            if (this.idleTime < 6) this.animateIdle()
+            else this.animateHappy()
         }
 
         this.trackEyes(pos)
@@ -118,8 +126,19 @@ export class Companion {
         gsap.killTweensOf(this.lowerBeak)
         gsap.killTweensOf(this.leftFoot)
         gsap.killTweensOf(this.rightFoot)
+        gsap.killTweensOf(this.leftFootFront)
+        gsap.killTweensOf(this.rightFootFront)
+        gsap.killTweensOf(this.leftFootBack)
+        gsap.killTweensOf(this.rightFootBack)
+        gsap.killTweensOf(this.lowerBeakOpenable)
 
         clearInterval(this.interval)
+    }
+
+    animateBlink() {
+        gsap.timeline({ repeat: -1, yoyo: true })
+            .to(this.eyelidUpper, { y: 15, duration: 0.1, delay: 4 }, 0)
+            .to(this.eyelidLower, { y: -15, duration: 0.1, delay: 4 }, 0)
     }
 
     animateWalkLeft() {
@@ -129,13 +148,15 @@ export class Companion {
         this.killTweens();
 
         gsap.timeline({ duration: 0.5 })
-            .to(this.body, { y: 0 }, 0)
-            .to(this.face, { x: -8, scaleX: 0.95, }, 0)
+            .to(this.body, { y: 0, rotate: 5, transformOrigin: 'bottom center' }, 0)
+            .to(this.face, { x: -8, scaleX: 0.95, transformOrigin: 'center' }, 0)
             .to(this.belly, { x: -3, }, 0)
             .to(this.leftWing, { x: 3, }, 0)
             .to(this.rightWing, { x: 3, }, 0)
             .to(this.beak, { x: -1, }, 0)
             .to(this.lowerBeak, { x: 1, }, 0)
+            .set(this.leftFootFront, { opacity: 1 }, 0)
+            .set(this.rightFootFront, { opacity: 1 }, 0)
 
         gsap.timeline({ repeat: -1 })
             .to(this.leftFoot, 0.25, { x: -23, y: -10 })
@@ -148,6 +169,10 @@ export class Companion {
             .to(this.rightFoot, 0.25, { x: 46, y: 0 })
             .to(this.rightFoot, 0.25, { x: 23, y: -10 })
             .to(this.rightFoot, 0.25, { x: 0, y: 0 })
+
+        gsap.timeline({ repeat: -1 })
+            .set(this.rightFootFront, { opacity: 0 }, 0)
+            .set(this.rightFootFront, { opacity: 1 }, 0.5)
 
         gsap.to(this.dom, 0.5, { x: '-=46px' })
         this.interval = window.setInterval(() => {
@@ -163,13 +188,15 @@ export class Companion {
         this.killTweens();
 
         gsap.timeline({ duration: 0.5 })
-            .to(this.body, { y: 0 }, 0)
-            .to(this.face, { x: 8, scaleX: 0.95, }, 0)
+            .to(this.body, { y: 0, rotate: -5, transformOrigin: 'bottom center' }, 0)
+            .to(this.face, { x: 8, scaleX: 0.95, transformOrigin: 'center' }, 0)
             .to(this.belly, { x: 3, }, 0)
             .to(this.leftWing, { x: -3, }, 0)
             .to(this.rightWing, { x: -3, }, 0)
             .to(this.beak, { x: 1, }, 0)
             .to(this.lowerBeak, { x: -1, }, 0)
+            .set(this.leftFootFront, { opacity: 1 }, 0)
+            .set(this.rightFootFront, { opacity: 1 }, 0)
 
         gsap.timeline({ repeat: -1 })
             .to(this.leftFoot, 0.25, { x: -23, y: 0 })
@@ -182,6 +209,10 @@ export class Companion {
             .to(this.rightFoot, 0.25, { x: 46, y: 0 })
             .to(this.rightFoot, 0.25, { x: 23, y: 0 })
             .to(this.rightFoot, 0.25, { x: 0, y: 0 })
+
+        gsap.timeline({ repeat: -1 })
+            .set(this.leftFootFront, { opacity: 0 }, 0)
+            .set(this.leftFootFront, { opacity: 1 }, 0.5)
 
         gsap.to(this.dom, 0.5, { x: '+=46px' })
         this.interval = window.setInterval(() => {
@@ -200,31 +231,48 @@ export class Companion {
             .to(this.rightFoot, { x: 0, y: 0 }, 0)
 
         await gsap.timeline({ duration: 0.5, })
-            .to(this.body, { y: 0, }, 0)
+            .to(this.body, { y: 0, rotate: 0 }, 0)
             .to(this.face, { x: 0, scaleX: 1, }, 0)
             .to(this.belly, { x: 0, }, 0)
             .to(this.leftWing, { x: 0, rotate: 0 }, 0)
             .to(this.rightWing, { x: 0, rotate: 0 }, 0)
             .to(this.beak, { x: 0, }, 0)
             .to(this.lowerBeak, { x: 0, }, 0)
+            .to(this.lowerBeakOpenable, { y: 0, }, 0)
+            .set(this.leftFootFront, { opacity: 1 }, 0)
+            .set(this.rightFootFront, { opacity: 1 }, 0)
             .then()
 
         gsap.timeline({ repeat: -1, yoyo: true })
-            .fromTo(this.body, { y: 0 }, { y: 2, duration: 0.5 })
-            .fromTo(this.leftWing, { rotate: 0 }, { rotate: -5, transformOrigin: "top left", duration: 0.5 }, 0)
-            .fromTo(this.rightWing, { rotate: 0 }, { rotate: 5, transformOrigin: "top right", duration: 0.5 }, 0)
+            .fromTo(this.body, { y: 0 }, { y: 2, duration: 1 })
+            .to(this.leftWing, { rotate: -5, transformOrigin: "top left", duration: 1, ease: "power1.inOut" }, 0)
+            .to(this.rightWing, { rotate: 5, transformOrigin: "top right", duration: 1, ease: "power1.inOut" }, 0)
     }
 
-    animateBlink() {
-        gsap.timeline({ repeat: -1, yoyo: true })
-            .to(this.eyelidUpper, { y: 15, duration: 0.1, delay: 4 }, 0)
-            .to(this.eyelidLower, { y: -15, duration: 0.1, delay: 4 }, 0)
-    }
-
-    animateHappy() {
+    async animateHappy() {
         if (this.state === 'happy') return
         this.state = 'happy'
 
         this.killTweens();
+
+        await gsap.timeline({ duration: 0.5, })
+            .to(this.body, { rotate: -10, transformOrigin: "bottom center", ease: 'power1.inOut' }, 0)
+            .to(this.leftWing, { x: 0, rotate: -10, ease: "power1.inOut" }, 0)
+            .to(this.rightWing, { x: 0, rotate: 10, ease: "power1.inOut" }, 0)
+            .to(this.leftFoot, { y: -10, ease: "power1.inOut" }, 0)
+            .set(this.leftFootFront, { opacity: 1 }, 0)
+            .set(this.leftFootFront, { opacity: 1 }, 0)
+            .then()
+
+        gsap.timeline({ repeat: -1, yoyo: true })
+            .to(this.lowerBeakOpenable, { y: 10, duration: 0.5, ease: "power1.inOut" }, 0)
+
+        gsap.timeline({ repeat: -1, yoyo: true })
+            .to(this.leftWing, { rotate: 10, transformOrigin: "top left", duration: 1, ease: "power1.inOut" }, 0)
+            .to(this.rightWing, { rotate: -10, transformOrigin: "top right", duration: 1, ease: "power1.inOut" }, 0)
+            .to(this.body, { rotate: 10, transformOrigin: "bottom center", duration: 1, ease: "power1.inOut" }, 0)
+            .to(this.leftFoot, { y: 0, ease: "power1.inOut" }, 0)
+            .to(this.rightFoot, { y: -10, yoyo: true, ease: "power1.inOut" }, 0.5)
+
     }
 }

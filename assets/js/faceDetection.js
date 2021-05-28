@@ -12,7 +12,7 @@ class FaceDetection {
     async estimateFaces(video) {
         const predictions = await faceDetection.model.estimateFaces(video, false);
         const newPredictions = [];
-        for (let prediction of predictions) 
+        for (let prediction of predictions)
             if (prediction.probability[0] > 0.9) {
                 newPredictions.push(prediction)
                 prediction.x = prediction.topLeft[0];
@@ -21,7 +21,7 @@ class FaceDetection {
                 prediction.height = prediction.bottomRight[1] - prediction.topLeft[1];
                 prediction.area = prediction.width * prediction.height;
             }
-        
+
         if (newPredictions.length) this.predictions = newPredictions;
     }
 
@@ -34,16 +34,16 @@ class FaceDetection {
 
     getDominantFace() {
         const dominantFace = this.predictions[0];
-        for (let prediction of this.predictions) 
+        for (let prediction of this.predictions)
             if (prediction.area > dominantFace.area)
                 dominantFace = prediction
-        
+
         return dominantFace
     }
 
     getTrackPos() {
         const face = this.getDominantFace();
-        return 1 - (face.x + face.width / 2) / camCanvas.width
+        return 1 - (face?.x + face?.width / 2) / camCanvas.width
     }
 }
 

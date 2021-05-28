@@ -8,13 +8,14 @@ export let companion;
 async function init() {
     gsap.registerPlugin(MorphSVGPlugin);
 
+    companion = new Companion();
+    companion.init();
+
     const model = await blazeface.load();
     faceDetection.addModel(model);
 
     initCam();
     setCanvasDimensions();
-    companion = new Companion();
-    companion.init();
 
     return model
 }
