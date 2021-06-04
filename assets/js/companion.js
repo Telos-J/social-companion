@@ -37,7 +37,7 @@ export class Companion {
     }
 
     tickIdleTime() {
-        if (this.state === 'idle' || this.state === 'happy') this.idleTime++
+        if (this.state === 'idle' || this.state === 'happy' || this.state === 'greet') this.idleTime++
         else this.idleTime = 0
         if (this.idleTime >= 10) this.idleTime = 0
         console.log(this.idleTime)
@@ -95,7 +95,8 @@ export class Companion {
             this.trackLeft = false;
             this.trackRight = false;
             if (this.idleTime < 6) this.animateIdle()
-            else this.animateHappy()
+            else this.animateGreet()
+            // else this.animateHappy()
         }
 
         this.trackEyes(pos)
@@ -148,13 +149,14 @@ export class Companion {
         this.killTweens();
 
         gsap.timeline({ duration: 0.5 })
-            .to(this.body, { y: 0, rotate: 5, transformOrigin: 'bottom center' }, 0)
+            .to(this.body, { x: 0, y: 0, rotate: 5, transformOrigin: 'bottom center' }, 0)
             .to(this.face, { x: -8, scaleX: 0.95, transformOrigin: 'center' }, 0)
             .to(this.belly, { x: -3, }, 0)
-            .to(this.leftWing, { x: 3, }, 0)
-            .to(this.rightWing, { x: 3, }, 0)
+            .to(this.leftWing, { x: 3, rotate: 0 }, 0)
+            .to(this.rightWing, { x: 3, rotate: 0 }, 0)
             .to(this.beak, { x: -1, }, 0)
             .to(this.lowerBeak, { x: 1, }, 0)
+            .to(this.lowerBeakOpenable, { y: 0, }, 0)
             .set(this.leftFootFront, { opacity: 1 }, 0)
             .set(this.rightFootFront, { opacity: 1 }, 0)
 
@@ -188,13 +190,14 @@ export class Companion {
         this.killTweens();
 
         gsap.timeline({ duration: 0.5 })
-            .to(this.body, { y: 0, rotate: -5, transformOrigin: 'bottom center' }, 0)
+            .to(this.body, { x: 0, y: 0, rotate: -5, transformOrigin: 'bottom center' }, 0)
             .to(this.face, { x: 8, scaleX: 0.95, transformOrigin: 'center' }, 0)
             .to(this.belly, { x: 3, }, 0)
-            .to(this.leftWing, { x: -3, }, 0)
-            .to(this.rightWing, { x: -3, }, 0)
+            .to(this.leftWing, { x: -3, rotate: 0 }, 0)
+            .to(this.rightWing, { x: -3, rotate: 0 }, 0)
             .to(this.beak, { x: 1, }, 0)
             .to(this.lowerBeak, { x: -1, }, 0)
+            .to(this.lowerBeakOpenable, { y: 0, }, 0)
             .set(this.leftFootFront, { opacity: 1 }, 0)
             .set(this.rightFootFront, { opacity: 1 }, 0)
 
@@ -230,8 +233,8 @@ export class Companion {
             .to(this.leftFoot, { x: 0, y: 0 }, 0)
             .to(this.rightFoot, { x: 0, y: 0 }, 0)
 
-        await gsap.timeline({ duration: 0.5, })
-            .to(this.body, { y: 0, rotate: 0 }, 0)
+        await gsap.timeline({ duration: 0.5 })
+            .to(this.body, { x: 0, y: 0, rotate: 0 }, 0)
             .to(this.face, { x: 0, scaleX: 1, }, 0)
             .to(this.belly, { x: 0, }, 0)
             .to(this.leftWing, { x: 0, rotate: 0 }, 0)
@@ -239,6 +242,8 @@ export class Companion {
             .to(this.beak, { x: 0, }, 0)
             .to(this.lowerBeak, { x: 0, }, 0)
             .to(this.lowerBeakOpenable, { y: 0, }, 0)
+            .to(this.leftFoot, { x: 0 }, 0)
+            .to(this.rightFoot, { y: 0, rotate: 0 }, 0)
             .set(this.leftFootFront, { opacity: 1 }, 0)
             .set(this.rightFootFront, { opacity: 1 }, 0)
             .then()
@@ -274,5 +279,31 @@ export class Companion {
             .to(this.leftFoot, { y: 0, ease: "power1.inOut" }, 0)
             .to(this.rightFoot, { y: -10, yoyo: true, ease: "power1.inOut" }, 0.5)
 
+    }
+
+    async animateGreet() {
+        if (this.state === 'greet') return
+        this.state = 'greet'
+
+        this.killTweens();
+
+        await gsap.timeline({ duration: 0.5, })
+            .to(this.body, { x: 5, y: -5, rotate: 10, transformOrigin: "bottom center" }, 0)
+            .to(this.face, { x: 0, scaleX: 1, }, 0)
+            .to(this.belly, { x: 0, }, 0)
+            .to(this.leftWing, { x: 0, rotate: 0 }, 0)
+            .to(this.rightWing, { x: 0, rotate: 100, transformOrigin: "80% 20%" }, 0)
+            .to(this.beak, { x: 0, }, 0)
+            .to(this.lowerBeak, { x: 0, }, 0)
+            .to(this.lowerBeakOpenable, { y: 10 }, 0)
+            .to(this.leftFoot, { x: 10 }, 0)
+            .to(this.rightFoot, { y: -2, rotate: -10, transformOrigin: "center center" }, 0)
+            .set(this.leftFootFront, { opacity: 1 }, 0)
+            .set(this.rightFootFront, { opacity: 1 }, 0)
+            .then()
+
+        gsap.timeline({ repeat: -1, yoyo: true })
+            .to(this.body, 0.2, { rotate: 11, ease: "none" }, 0)
+            .to(this.rightWing, 0.2, { rotate: 70, transformOrigin: "80% 20%", ease: "none" }, 0)
     }
 }
