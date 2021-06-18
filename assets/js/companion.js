@@ -86,10 +86,6 @@ export class Companion {
             this.trackLeft = false;
             this.trackRight = true;
         }
-        else {
-            this.trackLeft = false;
-            this.trackRight = false;
-        }
     }
 
     track(pos) {
@@ -101,8 +97,9 @@ export class Companion {
             animate.walkLeft(this)
         else if (this.trackRight && this.isRightOfTarget(pos))
             animate.walkRight(this)
-
         else {
+            this.trackLeft = false;
+            this.trackRight = false;
             if (this.idleTime < 6) animate.idle(this)
             else animate.happy(this)
         }
@@ -123,7 +120,7 @@ export class Companion {
     drawTarget(pos) {
         context.strokeStyle = 'red';
         context.beginPath();
-        context.arc(pos * canvas.width, canvas.height / 2, this.range, 0, Math.PI * 2);
+        context.arc(pos * canvas.width, canvas.height * 0.7, this.range, 0, Math.PI * 2);
         context.stroke();
     }
 
