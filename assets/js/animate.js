@@ -57,11 +57,16 @@ export function walkLeft(penguin) {
         .set(penguin.rightFootFront, { opacity: 0 }, 0)
         .set(penguin.rightFootFront, { opacity: 1 }, 0.5)
 
-    gsap.to(penguin.dom, 0.5, { x: '-=46px' })
+    moveLeft(penguin)
     penguin.interval = window.setInterval(() => {
-        gsap.to(penguin.dom, 0.5, { x: '-=46px' })
+        moveLeft(penguin)
     }, 500)
 
+}
+
+function moveLeft(penguin) {
+    const width = penguin.dom.getBoundingClientRect().width
+    gsap.to(penguin.dom, 0.5, { x: `-=${46 * width / 300}px` })
 }
 
 export function walkRight(penguin) {
@@ -98,10 +103,15 @@ export function walkRight(penguin) {
         .set(penguin.leftFootFront, { opacity: 0 }, 0)
         .set(penguin.leftFootFront, { opacity: 1 }, 0.5)
 
-    gsap.to(penguin.dom, 0.5, { x: '+=46px' })
+    moveRight(penguin)
     penguin.interval = window.setInterval(() => {
-        gsap.to(penguin.dom, 0.5, { x: '+=46px' })
+        moveRight(penguin)
     }, 500)
+}
+
+function moveRight(penguin) {
+        const width = penguin.dom.getBoundingClientRect().width
+        gsap.to(penguin.dom, 0.5, { x: `+=${46 * width / 300}px` })
 }
 
 export async function idle(penguin) {

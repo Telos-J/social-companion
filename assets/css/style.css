@@ -42,6 +42,7 @@ video {
 
 #penguin {
     position: absolute;
+    width: 30vh;
     left: 50%;
     top: 70%;
     transform: translate(-50%, -50%);
@@ -51,4 +52,5 @@ video {
     width: 100vw;
     height: 100vh;
     object-fit: cover;
+    transform: scale(1.8) translate(-4%, 2%);
 }

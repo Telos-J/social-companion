@@ -46,7 +46,6 @@ export class Companion {
         if (this.isIdle()) this.idleTime++
         else this.idleTime = 0
         if (this.idleTime >= 10) this.idleTime = 0
-        console.log(this.idleTime)
     }
 
     get x() {
@@ -112,8 +111,8 @@ export class Companion {
     trackEyes(pos) {
         const eyes = Array.from(this.dom.querySelectorAll('.eye'))
         for (let eye of eyes) {
-            const x = (pos - this.x / canvas.clientWidth) * this.dom.clientWidth / 10;
-            eye.style.transform = `translateX(${x}px)`;
+            const eyePos = pos - this.x / canvas.clientWidth // -0.5 ~ 0.5
+            gsap.to(eye, {x: eyePos * 30})
         }
     }
 
