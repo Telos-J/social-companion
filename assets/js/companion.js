@@ -25,6 +25,8 @@ export class Companion {
         this.rightFootBack = this.dom.querySelector('#right-foot-back');
         this.eyelidUpper = this.dom.querySelectorAll('.eye-lid-upper');
         this.eyelidLower = this.dom.querySelectorAll('.eye-lid-lower');
+        this.eyeShineSM = this.dom.querySelectorAll('.eye-shine-sm')
+        this.eyeTear = this.dom.querySelectorAll('.eye-tear')
         this.trackLeft = false;
         this.trackRight = false;
         this.idleTime = 0;
@@ -112,7 +114,7 @@ export class Companion {
         const eyes = Array.from(this.dom.querySelectorAll('.eye'))
         for (let eye of eyes) {
             const eyePos = pos - this.x / canvas.clientWidth // -0.5 ~ 0.5
-            gsap.to(eye, {x: eyePos * 30})
+            gsap.to(eye, { x: eyePos * 30 })
         }
     }
 

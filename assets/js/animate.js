@@ -13,6 +13,8 @@ function killTweens(penguin) {
     gsap.killTweensOf(penguin.leftFootBack)
     gsap.killTweensOf(penguin.rightFootBack)
     gsap.killTweensOf(penguin.lowerBeakOpenable)
+    gsap.set(penguin.eyeShineSM, { display: 'none' })
+    gsap.set(penguin.eyeTear, { display: 'none' })
 
     clearInterval(penguin.interval)
 }
@@ -38,6 +40,8 @@ export function walkLeft(penguin) {
         .to(penguin.beak, { x: -1, }, 0)
         .to(penguin.lowerBeak, { x: 1, }, 0)
         .to(penguin.lowerBeakOpenable, { y: 0, }, 0)
+        .to(penguin.leftFoot, { x: 0, rotate: 0 }, 0)
+        .to(penguin.rightFoot, { x: 0, rotate: 0 }, 0)
         .set(penguin.leftFootFront, { opacity: 1 }, 0)
         .set(penguin.rightFootFront, { opacity: 1 }, 0)
 
@@ -84,6 +88,8 @@ export function walkRight(penguin) {
         .to(penguin.beak, { x: 1, }, 0)
         .to(penguin.lowerBeak, { x: -1, }, 0)
         .to(penguin.lowerBeakOpenable, { y: 0, }, 0)
+        .to(penguin.leftFoot, { x: 0, rotate: 0 }, 0)
+        .to(penguin.rightFoot, { x: 0, rotate: 0 }, 0)
         .set(penguin.leftFootFront, { opacity: 1 }, 0)
         .set(penguin.rightFootFront, { opacity: 1 }, 0)
 
@@ -110,8 +116,8 @@ export function walkRight(penguin) {
 }
 
 function moveRight(penguin) {
-        const width = penguin.dom.getBoundingClientRect().width
-        gsap.to(penguin.dom, 0.5, { x: `+=${46 * width / 300}px` })
+    const width = penguin.dom.getBoundingClientRect().width
+    gsap.to(penguin.dom, 0.5, { x: `+=${46 * width / 300}px` })
 }
 
 export async function idle(penguin) {
@@ -119,10 +125,6 @@ export async function idle(penguin) {
     penguin.state = 'idle'
 
     killTweens(penguin);
-
-    gsap.timeline({ duration: 0.1 })
-        .to(penguin.leftFoot, { x: 0, y: 0 }, 0)
-        .to(penguin.rightFoot, { x: 0, y: 0 }, 0)
 
     await gsap.timeline({ duration: 0.5 })
         .to(penguin.body, { x: 0, y: 0, rotate: 0 }, 0)
@@ -133,8 +135,8 @@ export async function idle(penguin) {
         .to(penguin.beak, { x: 0, }, 0)
         .to(penguin.lowerBeak, { x: 0, }, 0)
         .to(penguin.lowerBeakOpenable, { y: 0, }, 0)
-        .to(penguin.leftFoot, { x: 0 }, 0)
-        .to(penguin.rightFoot, { y: 0, rotate: 0 }, 0)
+        .to(penguin.leftFoot, { x: 0, y: 0, rotate: 0 }, 0)
+        .to(penguin.rightFoot, { x: 0, y: 0, rotate: 0 }, 0)
         .set(penguin.leftFootFront, { opacity: 1 }, 0)
         .set(penguin.rightFootFront, { opacity: 1 }, 0)
         .then()
@@ -188,4 +190,29 @@ export async function greet(penguin) {
     gsap.timeline({ repeat: -1, yoyo: true })
         .to(penguin.body, 0.2, { rotate: 11, ease: "none" }, 0)
         .to(penguin.rightWing, 0.2, { rotate: 70, transformOrigin: "80% 20%", ease: "none" }, 0)
+}
+
+export async function cry(penguin) {
+    if (penguin.state === 'cry') return
+    penguin.state = 'cry'
+
+    killTweens(penguin)
+
+    await gsap.timeline({ duration: 0.5, })
+        .to(penguin.body, { y: 25, rotate: 0, ease: 'power1.inOut' }, 0)
+        .to(penguin.face, { x: 0, scaleX: 1, }, 0)
+        .to(penguin.leftWing, { rotate: 10, transformOrigin: "80% 20%" }, 0)
+        .to(penguin.rightWing, { rotate: -10, transformOrigin: "80% 20%" }, 0)
+        .to(penguin.leftFoot, { x: 4, y: 0, rotate: -30, transformOrigin: "center center" }, 0)
+        .to(penguin.rightFoot, { x: -4, y: 0, rotate: 30, transformOrigin: "center center" }, 0)
+        .set(penguin.leftFootFront, { opacity: 1 }, 0)
+        .set(penguin.rightFootFront, { opacity: 1 }, 0)
+        .set(penguin.eyeShineSM, { display: 'inline' }, 0)
+        .set(penguin.eyeTear, { display: 'inline' }, 0)
+        .then()
+
+    gsap.timeline({ repeat: -1, yoyo: true })
+        .to(penguin.body, 0.5, { y: '-=2', ease: "power1.inOut" }, 0)
+        .to(penguin.leftWing, { rotate: 8, transformOrigin: "80% 20%" }, 0)
+        .to(penguin.rightWing, { rotate: -8, transformOrigin: "80% 20%" }, 0)
 }

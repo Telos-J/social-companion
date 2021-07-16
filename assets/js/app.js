@@ -40,10 +40,11 @@ export async function main() {
     companion.track(pos)
     companion.drawTarget(pos)
 
-    console.log(detections)
     faceapi.draw.drawDetections(camCanvas, detections)
     faceapi.draw.drawFaceLandmarks(camCanvas, detections)
     faceapi.draw.drawFaceExpressions(camCanvas, detections)
+
+    console.log(detections, pos)
 
     requestAnimationFrame(main)
 }
