@@ -37,14 +37,16 @@ export async function main() {
     faceDetection.drawPredictions();
 
     const pos = faceDetection.getTrackPos()
-    companion.track(pos)
-    companion.drawTarget(pos)
 
     faceapi.draw.drawDetections(camCanvas, detections)
     faceapi.draw.drawFaceLandmarks(camCanvas, detections)
     faceapi.draw.drawFaceExpressions(camCanvas, detections)
 
-    console.log(detections, pos)
+    const detection = detections?.[0]?.expressions.asSortedArray()[0]
+
+    companion.track(pos)
+    companion.drawTarget(pos)
+    companion.update(pos, detection)
 
     requestAnimationFrame(main)
 }

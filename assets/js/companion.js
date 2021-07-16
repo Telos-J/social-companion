@@ -91,23 +91,26 @@ export class Companion {
 
     track(pos) {
         this.setTrackDirection(pos)
-
-        if ((this.state === 'alone' && pos) || (this.state === 'greet' && this.idleTime < 4)) animate.greet(this)
-
-        else if (this.trackLeft && this.isLeftOfTarget(pos))
-            animate.walkLeft(this)
-        else if (this.trackRight && this.isRightOfTarget(pos))
-            animate.walkRight(this)
+        this.walkLeft = false
+        this.walkRight = false
+        if (this.trackLeft && this.isLeftOfTarget(pos)) this.walkLeft = true
+        else if (this.trackRight && this.isRightOfTarget(pos)) this.walkRight = true
         else {
             this.trackLeft = false;
             this.trackRight = false;
-            if (this.idleTime < 6) animate.idle(this)
-            else animate.happy(this)
         }
+        this.trackEyes(pos)
+    }
+
+    update(pos, detection) {
+        if ((this.state === 'alone' && pos) || (this.state === 'greet' && this.idleTime < 4)) animate.greet(this)
+        else if (detection.expression === 'angry') animate.cry(this)
+        else if (this.walkLeft) animate.walkLeft(this)
+        else if (this.walkRight) animate.walkRight(this)
+        else if (this.idleTime < 6) animate.idle(this)
+        else animate.happy(this)
 
         if (!pos) this.state = 'alone'
-
-        this.trackEyes(pos)
     }
 
     trackEyes(pos) {
