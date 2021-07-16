@@ -33,7 +33,7 @@ class FaceDetection {
     }
 
     getDominantFace() {
-        const dominantFace = this.predictions[0];
+        let dominantFace = this.predictions[0];
         for (let prediction of this.predictions)
             if (prediction.area > dominantFace.area)
                 dominantFace = prediction

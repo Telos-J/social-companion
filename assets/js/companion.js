@@ -104,7 +104,7 @@ export class Companion {
 
     update(pos, detection) {
         if ((this.state === 'alone' && pos) || (this.state === 'greet' && this.idleTime < 4)) animate.greet(this)
-        else if (detection.expression === 'angry') animate.cry(this)
+        else if (detection?.expression === 'angry') animate.cry(this)
         else if (this.walkLeft) animate.walkLeft(this)
         else if (this.walkRight) animate.walkRight(this)
         else if (this.idleTime < 6) animate.idle(this)
