@@ -1,7 +1,7 @@
 import { canvas, context, convertToCanvasCoord } from './canvas.js';
 import * as animate from './animate.js'
 
-export class Companion {
+class Companion {
     constructor() {
         this._x = 0.5;
         this._y = 0.5;
@@ -133,3 +133,5 @@ export class Companion {
     }
 
 }
+
+export const companion = new Companion()

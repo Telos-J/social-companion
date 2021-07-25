@@ -1,15 +1,10 @@
 import { video, initCam } from './video.js';
 import { canvas, context, camCanvas, camContext, setCanvasDimensions } from './canvas.js';
-import { Companion } from './companion.js';
+import { companion } from './companion.js';
 import { faceDetection } from './faceDetection.js';
-
-export let companion;
 
 async function init() {
     gsap.registerPlugin(MorphSVGPlugin);
-
-    companion = new Companion();
-    companion.init();
 
     const model = await blazeface.load();
     faceDetection.addModel(model);
