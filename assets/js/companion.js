@@ -30,6 +30,7 @@ export class Companion {
         this.trackLeft = false;
         this.trackRight = false;
         this.idleTime = 0;
+        this.coolTime = 0;
     }
 
     init() {
@@ -37,17 +38,19 @@ export class Companion {
         animate.blink(this)
         animate.idle(this)
         this.state = 'alone'
-        window.setInterval(() => { self.tickIdleTime() }, 1000)
+        window.setInterval(() => { self.tick() }, 1000)
     }
 
     isIdle() {
         return this.state === 'idle' || this.state === 'happy' || this.state === 'greet'
     }
 
-    tickIdleTime() {
+    tick() {
         if (this.isIdle()) this.idleTime++
         else this.idleTime = 0
         if (this.idleTime >= 10) this.idleTime = 0
+        this.coolTime--
+        if (this.coolTime < 0) this.coolTime = 0
     }
 
     get x() {
@@ -103,7 +106,8 @@ export class Companion {
     }
 
     update(pos, detection) {
-        if ((this.state === 'alone' && pos) || (this.state === 'greet' && this.idleTime < 4)) animate.greet(this)
+        if (this.coolTime) return
+        else if ((this.state === 'alone' && pos) || (this.state === 'greet' && this.idleTime < 4)) animate.greet(this)
         else if (detection?.expression === 'angry') animate.cry(this)
         else if (this.walkLeft) animate.walkLeft(this)
         else if (this.walkRight) animate.walkRight(this)
