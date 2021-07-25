@@ -150,6 +150,7 @@ export async function idle(penguin) {
 export async function happy(penguin) {
     if (penguin.state === 'happy') return
     penguin.state = 'happy'
+    penguin.coolTime = 3
 
     killTweens(penguin);
 
@@ -157,7 +158,8 @@ export async function happy(penguin) {
         .to(penguin.body, { rotate: -10, transformOrigin: "bottom center", ease: 'power1.inOut' }, 0)
         .to(penguin.leftWing, { x: 0, rotate: -10, ease: "power1.inOut" }, 0)
         .to(penguin.rightWing, { x: 0, rotate: 10, ease: "power1.inOut" }, 0)
-        .to(penguin.leftFoot, { y: -10, ease: "power1.inOut" }, 0)
+        .to(penguin.leftFoot, { y: -10, rotate: 0, ease: "power1.inOut" }, 0)
+        .to(penguin.rightFoot, { rotate: 0, ease: "power1.inOut" }, 0)
         .then()
 
     gsap.timeline({ repeat: -1, yoyo: true })
@@ -175,15 +177,16 @@ export async function happy(penguin) {
 export async function greet(penguin) {
     if (penguin.state === 'greet') return
     penguin.state = 'greet'
+    penguin.coolTime = 3
 
     killTweens(penguin);
 
-    await gsap.timeline({ duration: 0.5, })
+    await gsap.timeline({ duration: 0.3, })
         .to(penguin.body, { x: 5, y: -5, rotate: 10, transformOrigin: "bottom center" }, 0)
         .to(penguin.leftWing, { x: 0, rotate: 0 }, 0)
         .to(penguin.rightWing, { x: 0, rotate: 100, transformOrigin: "80% 20%" }, 0)
         .to(penguin.lowerBeakOpenable, { y: 10 }, 0)
-        .to(penguin.leftFoot, { x: 10 }, 0)
+        .to(penguin.leftFoot, { x: 10, rotate: 0, }, 0)
         .to(penguin.rightFoot, { y: -2, rotate: -10, transformOrigin: "center center" }, 0)
         .then()
 

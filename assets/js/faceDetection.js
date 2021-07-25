@@ -2,48 +2,49 @@ import { camCanvas, camContext } from './canvas.js';
 
 class FaceDetection {
     constructor() {
+        this.detections = []
     }
 
-    addModel(model) {
-        this.model = model;
-        this.predictions = [];
+    async addModel(model) {
+        await Promise.all([
+            faceapi.nets.tinyFaceDetector.loadFromUri('/assets/models'),
+            faceapi.nets.faceLandmark68Net.loadFromUri('/assets/models'),
+            faceapi.nets.faceRecognitionNet.loadFromUri('/assets/models'),
+            faceapi.nets.faceExpressionNet.loadFromUri('/assets/models')
+        ])
     }
 
     async estimateFaces(video) {
-        const predictions = await faceDetection.model.estimateFaces(video, false);
-        const newPredictions = [];
-        for (let prediction of predictions)
-            if (prediction.probability[0] > 0.9) {
-                newPredictions.push(prediction)
-                prediction.x = prediction.topLeft[0];
-                prediction.y = prediction.topLeft[1];
-                prediction.width = prediction.bottomRight[0] - prediction.topLeft[0];
-                prediction.height = prediction.bottomRight[1] - prediction.topLeft[1];
-                prediction.area = prediction.width * prediction.height;
-            }
-
-        if (newPredictions.length) this.predictions = newPredictions;
+        const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
+        const newDetections = []
+        for (const detection of detections) {
+            if (detection.detection.score > 0.8) newDetections.push(detection)
+        }
+        if (newDetections.length) this.detections = newDetections
+        else this.detections = []
     }
 
-    drawPredictions() {
-        for (let prediction of this.predictions) {
-            camContext.fillStyle = 'rgba(256, 0, 0, 0.5)';
-            camContext.fillRect(prediction.x, prediction.y, prediction.width, prediction.height);
-        }
+    drawDetections() {
+        faceapi.draw.drawDetections(camCanvas, this.detections)
+        faceapi.draw.drawFaceLandmarks(camCanvas, this.detections)
+        faceapi.draw.drawFaceExpressions(camCanvas, this.detections)
     }
 
     getDominantFace() {
-        let dominantFace = this.predictions[0];
-        for (let prediction of this.predictions)
-            if (prediction.area > dominantFace.area)
-                dominantFace = prediction
+        let dominantFace = this.detections[0];
+        for (let detection of this.detections)
+            if (detection.detection.box.area > dominantFace.detection.box.area)
+                dominantFace = detection
 
         return dominantFace
     }
 
     getTrackPos() {
         const face = this.getDominantFace();
-        return 1 - (face?.x + face?.width / 2) / camCanvas.width
+        const box = face?.detection.box
+        const expression = face?.expressions.asSortedArray()[0]
+
+        return [1 - (box?.x + box?.width / 2) / camCanvas.width, expression]
     }
 }
 
