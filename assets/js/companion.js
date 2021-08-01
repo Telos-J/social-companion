@@ -58,7 +58,7 @@ class Companion {
         if (this.coolTime < 0) this.coolTime = 0
 
         if (this.alone) this.aloneTime++
-        else if (this.aloneTime) {
+        else if (this.aloneTime >= 2) {
             animate.greet(this)
             this.aloneTime = 0
         }
