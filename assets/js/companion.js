@@ -27,6 +27,8 @@ class Companion {
         this.eyelidLower = this.dom.querySelectorAll('.eye-lid-lower');
         this.eyeShineSM = this.dom.querySelectorAll('.eye-shine-sm')
         this.eyeTear = this.dom.querySelectorAll('.eye-tear')
+        this.eye = this.dom.querySelectorAll('.eye')
+        this.eyeLaugh = this.dom.querySelectorAll('.eye-laugh')
         this.trackLeft = false;
         this.trackRight = false;
         this.idleTime = 0;
@@ -123,6 +125,10 @@ class Companion {
         else if (detection?.expression === 'angry') {
             this.coolTime = 3
             animate.cry(this)
+        }
+        else if (detection?.expression === 'happy') {
+            this.coolTime = 3
+            animate.laugh(this)
         }
         else if (this.walkLeft) animate.walkLeft(this)
         else if (this.walkRight) animate.walkRight(this)

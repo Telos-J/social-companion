@@ -61,7 +61,6 @@ class FaceDetection {
 
     getTrackPos() {
         const [face, expression] = this.getDominantFace();
-        console.log(expression)
         return [1 - (face?.x + face?.width / 2) / camCanvas.width, expression]
     }
 }
