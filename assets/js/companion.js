@@ -120,7 +120,10 @@ class Companion {
 
     update(pos, detection) {
         if (this.coolTime) return
-        else if (detection?.expression === 'angry') animate.cry(this)
+        else if (detection?.expression === 'angry') {
+            this.coolTime = 3
+            animate.cry(this)
+        }
         else if (this.walkLeft) animate.walkLeft(this)
         else if (this.walkRight) animate.walkRight(this)
         else animate.idle(this)

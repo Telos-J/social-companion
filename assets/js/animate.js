@@ -198,7 +198,6 @@ export async function greet(penguin) {
 export async function cry(penguin) {
     if (penguin.state === 'cry') return
     penguin.state = 'cry'
-    penguin.coolTime = 3
 
     killTweens(penguin)
 
